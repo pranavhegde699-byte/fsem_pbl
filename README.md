@@ -57,9 +57,18 @@ npm run dev
 
 Copy `backend/.env.example` to `backend/.env` and configure:
 
-- `MONGO_URI` – MongoDB connection string
+- `MONGO_URI` – MongoDB connection string (default: `mongodb://localhost:27017/`)
 - `MONGO_DB_NAME` – Database name (default: `workproof`)
-- `GROQ_API_KEY` – *(optional)* API key for AI-powered document parsing
+- `GROQ_API_KEY` – *(optional)* API key for AI-powered document parsing. If not provided or if the API call fails, the system dynamically falls back to a robust local regex-based transaction parser.
+
+## Architecture & Databases
+
+- **MongoDB (App Data)**: Stores workers, scores, schemes, and documents collections via PyMongo.
+- **SQLite (Django Meta)**: Used as the default Django application database (`db.sqlite3`) for system configurations.
+- **AI Engine Fault Tolerance**: The scoring engine handles PDF parsing failure gracefully:
+  1. **Tier 1 (AI)**: Groq LLM API (`llama-3.3-70b-versatile`) extracts and structures transaction summaries.
+  2. **Tier 2 (Regex Parser)**: Falls back to a local regex parser that calculates inflow/outflow amounts, transaction counts, and consistency scores line-by-line.
+  3. **Tier 3 (Static Mock)**: Returns a static base rating if both previous tiers fail, ensuring no runtime crashes.
 
 ## Team
 
