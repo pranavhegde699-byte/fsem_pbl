@@ -51,6 +51,7 @@ def mongo_health(request):
     return Response({
         'status': 'ok',
         'database': settings.MONGO_DB_NAME,
+        'server_time': datetime.datetime.utcnow().isoformat(),
         'collections': {
             'workers': workers_collection.count_documents({}),
             'scores': scores_collection.count_documents({}),
@@ -167,6 +168,11 @@ def upload_upi_pdf(request):
     pdf_file = request.FILES.get('pdf')
     if not pdf_file:
         return Response({'error': 'No PDF file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Reject files larger than 5 MB to prevent abuse
+    max_size = 5 * 1024 * 1024
+    if pdf_file.size > max_size:
+        return Response({'error': 'File too large. Maximum size is 5 MB.'}, status=status.HTTP_400_BAD_REQUEST)
         
     try:
         raw_text, parsed_summary = parse_upi_pdf(pdf_file)
