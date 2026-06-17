@@ -296,7 +296,7 @@ def generate_document(request, pk):
 
         parsed_summary = worker.get('parsed_summary', {})
         schemes = match_schemes(worker, score.get('total_score', 0))
-        explanation_obj = score.get('explanations', {})
+        explanation_obj = score.get('explanations') or {}
         explanation = explanation_obj.get(language, explanation_obj.get('en', ''))
         
         file_url = generate_financial_pdf_data_uri(
