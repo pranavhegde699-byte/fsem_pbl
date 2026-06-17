@@ -1,6 +1,7 @@
-import requests, os
+import os
+import requests
 
-fonts_dir = r'c:\Users\Asus\OneDrive\Desktop\fsem_pbl\backend\fonts'
+fonts_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fonts')
 os.makedirs(fonts_dir, exist_ok=True)
 
 fonts = {
