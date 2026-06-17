@@ -1,4 +1,3 @@
-import json
 import datetime
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -9,7 +8,7 @@ from .db import (
     workers_collection, scores_collection, schemes_collection, documents_collection,
     ping_mongo,
 )
-from .utils import generate_jwt, decode_jwt, hash_password, check_password
+from .utils import generate_jwt, decode_jwt
 from .score_engine import parse_upi_pdf, calculate_workproof_score
 from .scheme_router import match_schemes
 from .pdf_generator import generate_financial_pdf_data_uri
